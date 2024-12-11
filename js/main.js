@@ -15,35 +15,25 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Screenshot slider touch handling
+// Screenshot slider hover durumunda durma
 const slider = document.querySelector('.screenshot-slider');
-let isDown = false;
-let startX;
-let scrollLeft;
 
-slider.addEventListener('mousedown', (e) => {
-    isDown = true;
-    slider.classList.add('active');
-    startX = e.pageX - slider.offsetLeft;
-    scrollLeft = slider.scrollLeft;
+slider.addEventListener('mouseenter', () => {
+    slider.style.animationPlayState = 'paused';
 });
 
 slider.addEventListener('mouseleave', () => {
-    isDown = false;
-    slider.classList.remove('active');
+    slider.style.animationPlayState = 'running';
 });
 
-slider.addEventListener('mouseup', () => {
-    isDown = false;
-    slider.classList.remove('active');
-});
-
-slider.addEventListener('mousemove', (e) => {
-    if (!isDown) return;
-    e.preventDefault();
-    const x = e.pageX - slider.offsetLeft;
-    const walk = (x - startX) * 2;
-    slider.scrollLeft = scrollLeft - walk;
+// Görüntüye tıklandığında büyük gösterme
+const screenshots = document.querySelectorAll('.screenshot-slider img');
+screenshots.forEach(screenshot => {
+    screenshot.addEventListener('click', () => {
+        screenshot.requestFullscreen().catch(err => {
+            console.log('Error attempting to enable fullscreen:', err.message);
+        });
+    });
 });
 
 // Lazy loading for images
